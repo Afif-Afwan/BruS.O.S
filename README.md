@@ -7,13 +7,17 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 
 ## Updates: 
 
-- 05/09 : Uploaded - Register.class
-                   - Login.class
-                   - Profile.class
-                   - EditEmailAndNUmber.class
-                   - SplashScreen.class
-                   - build.gradle(both)
-                   - strings.xml(under res/values)
+### 05/09:
+
+Uploaded:
+
+- Register.class
+- Login.class
+- Profile.class
+- EditEmailAndNUmber.class
+- SplashScreen.class
+- build.gradle(both)
+- strings.xml(under res/values)
 
 
 
