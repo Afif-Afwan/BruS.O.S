@@ -11,6 +11,17 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 
 Uploaded:
 
+- toolbar.xml
+- styles.xml (under res/values)
+
+Edited:
+- profile.java (added the lines regarding the usage of the toolbar) 
+
+
+### 04/09:
+
+Uploaded:
+
 - Register.class
 - Login.class
 - Profile.class
