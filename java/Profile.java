@@ -63,9 +63,18 @@ public class Profile extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         user = firebaseAuth.getCurrentUser();
         userID = firebaseAuth.getCurrentUser().getUid();
+        
+        StorageReference profileReference = storageReference.child("useres/"+ firebaseAuth.getCurrentUser().getUid() + "/profile_image.jpg");
+        profileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(mProfilePicture);
+            }
+        });
 
         DocumentReference documentReference;
 
@@ -141,6 +150,43 @@ public class Profile extends AppCompatActivity {
                 firebaseAuth.signOut();
                 startActivity(new Intent(getApplicationContext(),Login.class));
                 finish();
+            }
+        });
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1000){
+            Uri imageUri = data.getData();
+//            mProfilePicture.setImageURI(imageUri);
+            
+            uploadImageToFirebase(imageUri);
+
+            
+        }
+    }
+    
+    private void uploadImageToFirebase(Uri imageUri) {
+        //upload image to firebase
+        final StorageReference fileReference = storageReference.child("useres/"+ firebaseAuth.getCurrentUser().getUid() + "/profile_image.jpg");
+        fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Toast.makeText(MainActivity.this,"Profile Picture has been uploaded", Toast.LENGTH_LONG).show();
+                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(mProfilePicture);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this,"Failed", Toast.LENGTH_LONG).show();
+
             }
         });
     }
