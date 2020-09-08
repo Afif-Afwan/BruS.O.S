@@ -174,7 +174,7 @@ public class Profile extends AppCompatActivity {
         fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Toast.makeText(MainActivity.this,"Profile Picture has been uploaded", Toast.LENGTH_LONG).show();
+//                Toast.makeText(Profile.this,"Profile Picture has been uploaded", Toast.LENGTH_LONG).show();
                 fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
@@ -185,7 +185,7 @@ public class Profile extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this,"Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(Profile.this,"Failed", Toast.LENGTH_LONG).show();
 
             }
         });
