@@ -7,6 +7,11 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 
 ## Updates: 
 
+### 08/09:
+Edited:
+- profile.java (added Profile Picture Saving)
+- build.gradle Project:app (implemented Picasoo for picture saving!)
+
 ### 05/09:
 
 Uploaded:
