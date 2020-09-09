@@ -112,6 +112,7 @@ public class ChangePassword extends AppCompatActivity {
                 if (newPassword.equals(confirmNewPassword)){
                     user.updatePassword(newPassword);
                     Toast.makeText(ChangePassword.this, "Password is successfully updated!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
 
             }
