@@ -170,7 +170,7 @@ public class Register extends AppCompatActivity {
                                 user.put("Email", eMail);
                                 user.put("Date of Birth", DOB);
                                 user.put("IC Number", icNumber);
-                                user.put("Phone Number (+673)", phoneNumber);
+                                user.put("Phone Number (+673)", "+673 " + phoneNumber);
 
 
 
