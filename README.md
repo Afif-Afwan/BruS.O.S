@@ -10,9 +10,14 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 ### 09/09:
 
 Edited:
-- register.java
+- register.java +1 
 - activity_profile.xml
 - profile.java
+- changePassword.java
+
+Added:
+- Crypto.java
+- BasicCrypto.java
 
 ### 08/09:
 
