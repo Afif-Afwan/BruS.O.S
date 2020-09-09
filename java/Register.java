@@ -153,6 +153,7 @@ public class Register extends AppCompatActivity {
                 }
 
                 if (password.equals(confirmPassword)){
+                    passwordEncrypting();
                     mProgress.setVisibility(View.VISIBLE);
                     firebaseAuth.createUserWithEmailAndPassword(eMail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -171,6 +172,7 @@ public class Register extends AppCompatActivity {
                                 user.put("Date of Birth", DOB);
                                 user.put("IC Number", icNumber);
                                 user.put("Phone Number (+673)", "+673 " + phoneNumber);
+                                user.put("Password", encryptedPassword);
 
 
 
@@ -203,6 +205,14 @@ public class Register extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),Login.class));
             }
         });
+    }
+    
+    private void passwordEncrypting() {
+        Crypto crypto = new BasicCrypto();
+        String dataCrypting = password;
+        String encryptedData = new String(crypto.encrypt(dataCrypting.getBytes()));
+        encryptedPassword = encryptedData;
+//        Toast.makeText(Register.this, "Password is " + encryptedPassword, Toast.LENGTH_SHORT).show();
     }
 
     private void dateChecker() {
