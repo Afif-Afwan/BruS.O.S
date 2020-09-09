@@ -33,6 +33,8 @@ public class Profile extends AppCompatActivity {
     Button mLogoutBtn, mChangePasswordBtn, mEditBtn, mUpdatePPBtn;
 
     ImageView mProfilePicture;
+    
+    ProgressBar progressBar;
 
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
@@ -57,6 +59,7 @@ public class Profile extends AppCompatActivity {
         mLogoutBtn = findViewById(R.id.logoutBtn);
         mChangePasswordBtn = findViewById(R.id.changePasswordBtn);
         mEditBtn = findViewById(R.id.editBtn);
+        progressBar = findViewById(R.id.profilePicProgress);
 
         mProfilePicture = findViewById(R.id.profilePictureIV);
         mUpdatePPBtn = findViewById(R.id.updatePPBtn);
@@ -68,7 +71,7 @@ public class Profile extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         userID = firebaseAuth.getCurrentUser().getUid();
         
-        StorageReference profileReference = storageReference.child("useres/"+ firebaseAuth.getCurrentUser().getUid() + "/profile_image.jpg");
+        StorageReference profileReference = storageReference.child("users/"+ firebaseAuth.getCurrentUser().getUid() + "/profile_image.jpg");
         profileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -161,7 +164,7 @@ public class Profile extends AppCompatActivity {
         if(requestCode == 1000){
             Uri imageUri = data.getData();
 //            mProfilePicture.setImageURI(imageUri);
-            
+            progressBar.setVisibility(View.VISIBLE);
             uploadImageToFirebase(imageUri);
 
             
@@ -170,7 +173,7 @@ public class Profile extends AppCompatActivity {
     
     private void uploadImageToFirebase(Uri imageUri) {
         //upload image to firebase
-        final StorageReference fileReference = storageReference.child("useres/"+ firebaseAuth.getCurrentUser().getUid() + "/profile_image.jpg");
+        final StorageReference fileReference = storageReference.child("users/"+ firebaseAuth.getCurrentUser().getUid() + "/profile_image.jpg");
         fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -179,6 +182,8 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         Picasso.get().load(uri).into(mProfilePicture);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(MainActivity.this,"Profile Picture has been uploaded", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -186,7 +191,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(Profile.this,"Failed", Toast.LENGTH_LONG).show();
-
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
