@@ -1,11 +1,10 @@
-package com.example.iertest2;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.auth.User;
 
 public class ChangePassword extends AppCompatActivity {
 
@@ -143,7 +145,7 @@ public class ChangePassword extends AppCompatActivity {
                             }
                         });
                         Toast.makeText(ChangePassword.this, "Password is successfully updated!", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
                     } else {
                         Toast.makeText(ChangePassword.this, "Either password field is wrong. Please try again.", Toast.LENGTH_LONG).show();
                         mNewPassword.setText("");
@@ -153,7 +155,7 @@ public class ChangePassword extends AppCompatActivity {
                     Toast.makeText(ChangePassword.this, "You have inputted the wrong password. Please try again.", Toast.LENGTH_LONG).show();
                     mOldPassword.setText("");
                 }
-                
+
             }
 
             private void encryptingNewPassword() {
@@ -175,4 +177,3 @@ public class ChangePassword extends AppCompatActivity {
 
     }
 }
-
