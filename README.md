@@ -10,6 +10,7 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 ### 10/09:
 
 Edited: 
+- editEmailAndNumber.java
 - changePassword.java
 - activity_change_password.xml
 - profile.java
