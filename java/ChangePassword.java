@@ -34,7 +34,11 @@ public class ChangePassword extends AppCompatActivity {
     EditText mOldPassword, mNewPassword, mConfirmNewPassword;
     String oldPassword, newPassword, confirmNewPassword;
     Button mConfirmChange;
-    TextView mResetForgottenPassword;
+    TextView mResetForgottenPassword,mPrevious;
+
+    String cryptedOriginal = " ";
+    String decryptedPassword = " ";
+    String newlyCrpted = "";
 
 
 
@@ -57,12 +61,23 @@ public class ChangePassword extends AppCompatActivity {
 
         mResetForgottenPassword = findViewById(R.id.resetForgottenOldPassword);
 
+        mPrevious = findViewById(R.id.previousCrypted);
 
 
 
-        DocumentReference documentReference;
+
+        final DocumentReference documentReference;
 
         documentReference = firebaseFirestore.collection("users").document(userID);
+
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                mPrevious.setText(value.getString("Password"));
+            }
+        });
+
+
 
 
         //Incase User press the Forgot password button
@@ -105,19 +120,59 @@ public class ChangePassword extends AppCompatActivity {
         mConfirmChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                oldPassword = mOldPassword.getText().toString().trim();
                 newPassword = mNewPassword.getText().toString().trim();
                 confirmNewPassword = mConfirmNewPassword.getText().toString().trim();
 
-                if (newPassword.equals(confirmNewPassword)){
-                    user.updatePassword(newPassword);
-                    Toast.makeText(ChangePassword.this, "Password is successfully updated!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                }
+                cryptedOriginal = mPrevious.getText().toString().trim();
 
+                passwordDecrypting();
+
+                if(oldPassword.equals(decryptedPassword)){
+                    if (newPassword.equals(confirmNewPassword)){
+                        user.updatePassword(newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                encryptingNewPassword();
+                                documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        documentReference.update("Password", newlyCrpted);
+                                    }
+                                });
+                            }
+                        });
+                        Toast.makeText(ChangePassword.this, "Password is successfully updated!", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    } else {
+                        Toast.makeText(ChangePassword.this, "Either password field is wrong. Please try again.", Toast.LENGTH_LONG).show();
+                        mNewPassword.setText("");
+                        mConfirmNewPassword.setText("");
+                    }
+                } else {
+                    Toast.makeText(ChangePassword.this, "You have inputted the wrong password. Please try again.", Toast.LENGTH_LONG).show();
+                    mOldPassword.setText("");
+                }
+                
+            }
+
+            private void encryptingNewPassword() {
+                Crypto crypto = new BasicCrypto();
+                String dataCrypting = newPassword;
+                String encryptedData = new String(crypto.encrypt(dataCrypting.getBytes()));
+                newlyCrpted = encryptedData;
+            }
+
+            private void passwordDecrypting() {
+                Crypto crypto = new BasicCrypto();
+                String dataDecrypting = cryptedOriginal;
+                String decryptedData = new String(crypto.decrypt(dataDecrypting.getBytes()));
+                decryptedPassword = decryptedData;
+//                Toast.makeText(ChangePassword.this, "Password is " + decryptedData, Toast.LENGTH_SHORT).show();
             }
         });
 
 
     }
 }
+
