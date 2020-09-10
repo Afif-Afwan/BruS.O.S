@@ -12,6 +12,7 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 Edited: 
 - changePassword.java
 - activity_change_password.xml
+- profile.java
 
 ### 09/09:
 
