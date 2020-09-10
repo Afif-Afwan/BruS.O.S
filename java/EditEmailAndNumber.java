@@ -1,7 +1,9 @@
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,10 +45,11 @@ public class EditEmailAndNumber extends AppCompatActivity {
         setContentView(R.layout.activity_edit_email_and_number);
 
         editNewEmail = findViewById(R.id.editNewEmail);
-        editNewPhoneNumber = findViewById(R.id.editNewPhoneNumber);
-
         editnewEmailBtn = findViewById(R.id.editNewEmailBtn);
+
+        editNewPhoneNumber = findViewById(R.id.editNewPhoneNumber);
         editNewPhoneNumberBtn = findViewById(R.id.editNewPhoneNumberBtn);
+
         finishEditBtn = findViewById(R.id.finishEditBtn);
 
         firebaseAuth        = FirebaseAuth.getInstance();
@@ -63,38 +66,96 @@ public class EditEmailAndNumber extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String newEmail = editNewEmail.getText().toString().trim();
-                user.updateEmail(newEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                final EditText confirmEmailChange = new EditText(v.getContext());
+                AlertDialog.Builder eMailValidationDialog = new AlertDialog.Builder(v.getContext());
+                eMailValidationDialog.setTitle("Changing - Email");
+                eMailValidationDialog.setMessage("Please retype your new email to change your email address");
+                eMailValidationDialog.setView(confirmEmailChange);
+
+                eMailValidationDialog.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(EditEmailAndNumber.this, "Email has been successfully updated",Toast.LENGTH_SHORT).show();
-                        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                documentReference.update(
-                                        "Email", newEmail
-                                );
-                            }
-                        });
-                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newEmailConfirmation = confirmEmailChange.getText().toString();
+                        if (newEmail.equals(newEmailConfirmation)){
+                            user.updateEmail(newEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "onSuccess: user profile is updated for: " + newEmail);
+                                Toast.makeText(EditEmailAndNumber.this, "Email has been successfully updated",Toast.LENGTH_SHORT).show();
+                                documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        documentReference.update(
+                                                "Email", newEmail
+                                        );
+                                    }
+                                });
+                                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "onSuccess: user profile is updated for: " + newEmail);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d(TAG,"onFailure: " + e.toString());
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.d(TAG,"onFailure: " + e.toString());
+                                Toast.makeText(EditEmailAndNumber.this, "Error! Please retry!",Toast.LENGTH_SHORT).show();
                             }
                         });
 
+                        }
+                        
 
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(EditEmailAndNumber.this, "Error! Please retry!",Toast.LENGTH_SHORT).show();
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
                 });
+
+            }
+        });
+
+        editNewPhoneNumberBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String newPhoneNumber = editNewPhoneNumber.getText().toString().trim();
+                final EditText confirmPhoneNumberChange = new EditText(v.getContext());
+                AlertDialog.Builder phoneNumberValidationDialog = new AlertDialog.Builder(v.getContext());
+                phoneNumberValidationDialog.setTitle("Changing - Phone Number");
+                phoneNumberValidationDialog.setMessage("Please retype your phone number to change your phone number");
+                phoneNumberValidationDialog.setView(confirmPhoneNumberChange);
+
+                phoneNumberValidationDialog.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newPhoneNumberConfirmation = confirmPhoneNumberChange.getText().toString();
+                        if (newPhoneNumber.equals(newPhoneNumberConfirmation)){
+                            documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    documentReference.update(
+                                            "Phone Number", "+673 " + newPhoneNumber
+                                    );
+                                }
+                            });
+                        }
+                    }
+                    
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        
+                    }
+                });
+                
             }
         });
 
