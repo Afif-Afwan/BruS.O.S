@@ -89,17 +89,6 @@ public class EditEmailAndNumber extends AppCompatActivity {
                                         );
                                     }
                                 });
-                                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "onSuccess: user profile is updated for: " + newEmail);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d(TAG,"onFailure: " + e.toString());
-                                    }
-                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
