@@ -7,6 +7,14 @@ Created and checked by FYP20S1_01, mainly Afif Afwan and Aiman Bazli.
 
 ## Updates: 
 
+### 12/09:
+
+Edited: 
+- editEmailAndNumber.java
+
+Added:
+- alternate version of EditEmailAndNumber Activity
+
 ### 10/09:
 
 Edited: 
