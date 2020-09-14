@@ -43,6 +43,8 @@ public class Register extends AppCompatActivity {
             userID, day, month, year;
 
     boolean leapYear;
+    
+    String encryptedPassword = " ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
