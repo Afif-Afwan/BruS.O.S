@@ -1,0 +1,68 @@
+package com.example.fyp_02;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DisplayedHealthComplications extends AppCompatActivity {
+
+    List<HealthComplicationsModel> mModelList = new ArrayList<>();
+    RecyclerView mRecyclerView;
+
+    FirebaseFirestore mFirestore;
+    FirebaseAuth firebaseAuth;
+
+    String userID;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_displayed_health_complications);
+
+        mFirestore = FirebaseFirestore.getInstance();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        userID = firebaseAuth.getCurrentUser().getUid();
+
+        mRecyclerView = findViewById(R.id.currentHealthComplicatons);
+
+        showHealthComplications();
+
+    }
+
+    private void showHealthComplications() {
+        mFirestore.collection("users").document(userID).collection("Health Complications")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                mModelList.clear();
+
+                for (DocumentSnapshot doc: task.getResult()) {
+                    HealthComplicationsModel model = new HealthComplicationsModel(
+                            doc.getString("Health"),
+                            doc.getString("Description"));
+                    mModelList.add(model);
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+}
