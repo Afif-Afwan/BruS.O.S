@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HealthComplications">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginBottom="210dp">
+
+        <include layout="@layout/activity_displayed_health_complications"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/healthComplications"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:inputType="text"
+        android:hint="Health Complications"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/descriptionHealthComp"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:inputType="text"
+        android:hint="Description"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/addHealthComplicationButton"
+        android:layout_marginTop="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Health Complications"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:textColor="#000000"/>
+
+
+
+
+
+</LinearLayout>
